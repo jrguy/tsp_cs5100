@@ -1,0 +1,45 @@
+Reason for approach as detailed below is due to the curse of dimensionality that occurs with the Traveling Salesman Problem. When the Traveling Salesman Problem is considered as a state space of a larger set, namely the goal of finding exactly n connections for the traveling salesman, it becomes clear as the goal of finding exactly n edges from the set of edges is larger and will grow faster than the goal of finding a path that is a subset of the larger set. For a well connected unique graph, this is necessarily the Binomial Coefficient of N(N-1)/2 Choose N. However, the number of paths that are possible for a given set of nodes is necessarily N!, as that is the permutation of the order of the nodes that preserves the completeness of the set, more readily seen as N(N-1)! for the idea of having boundary edges. 
+
+This necessitates that the total number of combinations is based on a much larger set, namely the total number of ways for N nodes to as a set choose N edges, with multiple instances of nodes appearing, but each node choosing at least one edge. This comes out to a total of N(N-1)! / Binomial Coefficient (N(N-1)/2, N) 
+
+When this value is considered for very large N, it can be seen that it drops off to zero at a highly fast rate. This means that the odds of selecting the paths from within the possible combinations of the nodes choosing at least one edge is vanishingly small. 
+
+Further more, selecting the procedure in such a way as to make the top term as small as possible will limit the number of possible considerations, and as such, aid in finding the best outcomes only in so far as they do not greatly limit the possible chance of their discovery. 
+
+For this reason, we consider the following implementation progression. 
+First, for a random distribution of nodes, find the most efficient method of selecting an annealing style value of temperature given a number of iterations and nodes, and determining the best outcomes from the set of their values. This is done below, and is based off of a Standford University Mini-Project on the topic, which more can be found on in the link comment in the code. 
+
+Following along to the above, what  we propose to investigate in a serious manner now is the selection of the outer node of the set and the modulation of the inner series. To do this :    
+For each node, find the value of the opportunity cost for not selecting the least cost at that node (i.e., If I do not choose my two best links, what cost will I necessarily suffer?)
+Order the nodes by the opportunity costs in this manner, and as you do, note for each the indices of concern, the costs, and the status as either least cost or second least cost, or third least cost or fourth least cost. 
+Then, from the set of nodes, search for instances where the indices of a least cost for a given node are matched by the transpose of the indices for the least cost of another node. Pay particular attention for instances where a node has a least cost edge or second least cost edge to a node and its transpose has similar or better matching. These instances are to be highly preferred, and will form a secondary set for consideration and investigation. Similarly during this phase, calculate the minim heuristic for the set, where we will determine the valuation of the total edge distances if each node had selected it's least cost edges, not counting those that are highly preferred more than once (no double counting). This is the minimum cost for the set to have each node select at most two edges, and may not form a path. If it does form a path, we have necessarily found the minimum path by the way! Otherwise, from this organization, remove those links that are contested, potentially breaking chains and you will find only those that are highly preferred! This shows that the highly preferred are indeed a promising place to start for the secondary analysis. 
+
+What we will do then is the following :    
+0) Perform monte carlo on the entire set to ascertain the minimum path.
+
+1) Given a set of nodes ordered by opportunity cost, set these nodes as the outer nodes of the set with their matching edges interior. These are not to be disturbed. Then, perturb the inner set, performing monte carlo style process with connections to attempt to discover the best connection. 
+
+2) Given a set of highly preferred connections, perturb only those connections that are not part of these sets in the following manner 
+
+  2a) First, with at least 2 sets if two such sets exist
+
+  2b) If more than 2 such sets exist, alter their orientation within the sets
+  until all combinatios of sets of 2 have been exhausted for analysis. 
+
+  2c) Proceed to the next higher amount of sets. 
+
+  2d) Check to see if any such sets can be combined into larger sets. If larger 
+  chained connections are possible, for each such larger chain set, set them 
+  and then perturb the inner portion of these as well.
+
+Likely Outcomes : Little to no improvement, as the original modification likely samples from these sets as well. However, may be able to speed up and reduce number of iterations to get a good enough value in the meantime.   
+
+Additionally, if you look at the original work we did on the idea of node modality, it can be seen that with this preprocessing approach as noted above, the nature of the nodes in a sparse graph can also be determined ahead of processing. This then gives three main advantages to this pre-process of the TSP :    
+1) Figure out potential cost based on the number of exceedingly preferred sets within the TSP. The greater the number the greater the cost of this approach, but the more likely a good outcome can be achieved. 
+2) Figure out the potential starting point for best annealing approaches, leading to better outcomes for the set. 
+3) Figure out if the TSP is solvable for the stated graph based on the nature of the nodes in the graph, in time n^2, which is necessarily less than the TSP approaches. This is also incidental in the pre-process, given an additional benefit to completing this before starting the process of monte carlo simulations. 
+
+In terms of revised schedule :    
+In the next week complete step 1 as stated above 
+In the week following complete step 2b and integrate with data being pulled in. This is the goal of completion for checkpoint 2. 
+The final project completion will entail finishing 2c and 2d, as well as potentially including a checker for the sparse TSP graphs. 
