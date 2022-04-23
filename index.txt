@@ -1,6 +1,6 @@
 entry.py: starting  point that accepts command args, JG
 map.py: file for map data sets, JG
-processor_json.py: the processor library that executes the different json functions, JG
+processor_json.py: the processor library that executes the different json functions, Builds adj_mtrx JG
 TSPAttempt1.py: The initial attempt of the TSP using Monte Carlo Markov Chains. BL
 
 output folder: default output location for writing Json files
