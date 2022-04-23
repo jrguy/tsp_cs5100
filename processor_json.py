@@ -48,3 +48,43 @@ class ProcessorJson:
             self.write_dic(obj, file_name)
         else:
             return obj
+
+    def make_adjacency_m(self, data):
+        adj_m = []
+        key_list = {}
+        list_ind = 0
+        index = 0
+
+        for key, value in data.items():
+            adj_m.insert(list_ind, [])
+            if key not in key_list:
+                key_list[key] = index
+                index += 1
+            for sub_key, sub_val in data[key]['start'].items():
+                if sub_key not in key_list:
+                    key_list[sub_key] = index
+                    index += 1
+            for sub_key, sub_val in data[key]['end'].items():
+                if sub_key not in key_list:
+                    key_list[sub_key] = index
+                    index += 1
+            list_ind += 1
+
+        list_ind = 0
+        for key, value in data.items():
+            cur_index = 0
+            for found_k in key_list.items():
+                adj_m[list_ind].insert(cur_index, 0)
+                cur_index += 1
+            list_ind += 1
+
+        list_ind = 0
+        for key, value in data.items():
+            for sub_key, sub_val in data[key]['start'].items():
+                cur_index = key_list[sub_key]
+                adj_m[list_ind][cur_index] = sub_val
+            for sub_key, sub_val in data[key]['end'].items():
+                cur_index = key_list[sub_key]
+                adj_m[cur_index][list_ind] = sub_val
+            list_ind += 1
+        return adj_m

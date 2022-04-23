@@ -1,12 +1,12 @@
 cities = {
     "Augusta": {
         "start": {
-            "95": 10,
-            "295": 8
+            "Portland": 10,
+            "Alfred": 8
         },
         "end": {
-            "95": 10,
-            "295": 8
+            "Portland": 10,
+            "Alfred": 8
         }
     },
     "Alfred": {
@@ -33,12 +33,12 @@ cities = {
 cities2 = {
     "Bangor": {
         "start": {
-            "95": 10,
-            "295": 8
+            "Portland": 10,
+            "Augusta": 8
         },
         "end": {
-            "95": 10,
-            "295": 8
+            "Portland": 10,
+            "Augusta": 8
         }
     }
 }
