@@ -1,5 +1,6 @@
 import json
 import requests
+import city_list
 
 class ProcessorJson:
 
@@ -49,6 +50,28 @@ class ProcessorJson:
         else:
             return obj
 
+    def write_new_data(self):
+        cities = city_list.cities
+        distances = city_list.distances
+        final = {}
+        i = 0
+        for city in cities:
+            final[city] = {}
+            final[city]['start'] = {}
+            final[city]['end'] = {}
+            dist_i = 0
+            for distance in distances:
+                if dist_i != i:
+                    final[city]['start'][cities[dist_i]] = distance
+                    final[city]['end'][cities[dist_i]] = distance
+                else:
+                    final[city]['start'][cities[dist_i]] = 0
+                    final[city]['end'][cities[dist_i]] = 0
+                dist_i += 1
+            i += 1
+
+        return final
+
     def make_adjacency_m(self, data):
         adj_m = []
         key_list = {}
@@ -83,8 +106,8 @@ class ProcessorJson:
             for sub_key, sub_val in data[key]['start'].items():
                 cur_index = key_list[sub_key]
                 adj_m[list_ind][cur_index] = sub_val
-            for sub_key, sub_val in data[key]['end'].items():
-                cur_index = key_list[sub_key]
-                adj_m[cur_index][list_ind] = sub_val
+            # for sub_key, sub_val in data[key]['end'].items():
+            #     cur_index = key_list[sub_key]
+            #     adj_m[cur_index][list_ind] = sub_val
             list_ind += 1
         return adj_m
